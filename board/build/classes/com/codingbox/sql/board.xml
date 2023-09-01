@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Board">
+	<insert id="insertBoard" parameterType="boarddto">
+		INSERT INTO tbl_board
+		VALUES
+		( board_seq.nextval, #{boardtitle},
+		#{boardcontent},#{username},sysdate,0)
+	</insert>
+	<select id="getBoardList" resultType="boarddto">
+		SELECT * FROM (
+		SELECT rownum r,A. * FROM (
+		SELECT *FROM TBL_board ORDER
+		BY boardnum DESC) A)B
+		WHERE B.r BETWEEN #{startRow} AND #{endRow}
+	</select>
+
+	<select id="getBoardCnt" resultType="_int">
+		SELECT count(*) FROM
+		TBL_board
+	</select>
+	<select id="getDetail" parameterType="_int"
+		resultType="boarddto">
+		SELECT * FROM tbl_board WHERE boardnum = #{boardnum}
+
+	</select>
+	<update id="updateReadCount" parameterType="_int">
+		UPDATE tbl_board SET
+		BOARDREADCONTENT = BOARDREADCONTENT +1
+		WHERE BOARDNUM = #{boardnum}
+	</update>
+	<insert id = "addReply" parameterType = "replydto">
+		INSERT INTO tbl_reply VALUES
+		(reply_req.nextval, #{replycontent}, #{username},#{password},#{boardnum})
+	</insert>
+	<select id = "getReplys" parameterType="_int" resultType = "replydto">
+	SELECT * FROM tbl_reply WHERE BOARDNUM =#{boardnum}
+	</select>
+	<update id = "updateReply" parameterType = "hashmap">
+		UPDATE tbl_reply SET REPLYCONTENT = #{replycontent}
+		WHERE REPLYNUM = #{replynum}
+	</update>
+	<update id = "deleteReply" parameterType = "_int">
+		delete from tbl_reply
+		WHERE REPLYNUM = #{replynum}
+	</update>
+</mapper>
+
+
