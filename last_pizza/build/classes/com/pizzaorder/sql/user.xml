@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="User">
+	<insert id="join" parameterType="userdto">
+		INSERT INTO CUSTOMER VALUES (#{customer_id},#{customer_pw},#{customer_name},#{customer_phonenum},#{customer_zipcode},#{customer_addr},#{customer_extraaddr})
+	</insert>
+	<select id="login" parameterType="hashmap" resultType="_int">
+		SELECT count(*) FROM CUSTOMER WHERE userid= #{customer_id} AND userpw = #{customer_pw}
+	</select>
+</mapper>
